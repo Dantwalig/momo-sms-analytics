@@ -1,0 +1,14 @@
+# XML Processing
+lxml>=4.9.0
+# Alternative: xml.etree.ElementTree (built-in, no install needed)
+
+# Date/Time Utilities
+python-dateutil>=2.8.0
+
+# Optional: FastAPI for API endpoints (bonus feature)
+# fastapi>=0.104.0
+# uvicorn>=0.24.0
+
+# Database (SQLite is built-in, but sqlalchemy can be useful)
+# sqlalchemy>=2.0.0
+
