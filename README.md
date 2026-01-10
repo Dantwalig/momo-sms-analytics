@@ -146,3 +146,7 @@ python -m unittest discover tests
 - Database files (`*.sqlite3`) are git-ignored
 - Logs are stored in `data/logs/`
 - Unparsed XML snippets are stored in `data/logs/dead_letter/`
+
+## SCRUM BOARD
+
+[Scrum Board](https://github.com/users/Abdull-Kudus/projects/2)
