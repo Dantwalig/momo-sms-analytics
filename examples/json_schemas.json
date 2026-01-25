@@ -34,5 +34,15 @@
     "assigned_at": "2024-05-10T16:30:51Z"
   },
 
+   "system_log": {
+    "log_id": 1,
+    "transaction_id": 1,
+    "log_status": "success",
+    "service_center": "+250788110381",
+    "readable_date": "10 May 2024 4:30:58 PM",
+    "logged_at": "2024-05-10T16:30:58Z"
+  },
+
+
   
 }
