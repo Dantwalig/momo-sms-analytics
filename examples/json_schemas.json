@@ -1,3 +1,85 @@
 {
-    
+  "user": {
+    "user_id": 1,
+    "phone_number": "250791666666",
+    "contact_name": "Jane Smith",
+    "user_type": "individual",
+    "created_at": "2024-05-10T16:30:51Z"
+  },
+
+  "category": {
+    "category_id": 1,
+    "category_name": "transfer",
+    "description": "Person-to-person money transfer",
+    "created_at": "2024-05-10T00:00:00Z"
+  },
+
+  "transaction": {
+    "transaction_id": 1,
+    "transaction_reference": "76662021700",
+    "amount": 2000.00,
+    "transaction_type": "received",
+    "transaction_status": "completed",
+    "transaction_date": "2024-05-10T16:30:51Z",
+    "category_id": 1,
+    "raw_sms_body": "You have received 2000 RWF from Jane Smith (*********013) on your mobile money account at 2024-05-10 16:30:51. Message from sender: . Your new balance:2000 RWF. Financial Transaction Id: 76662021700.",
+    "balance_after": 2000.00
+  },
+
+  "role": {
+    "role_id": 1,
+    "user_id": 2,
+    "transaction_id": 1,
+    "role_type": "sender",
+    "assigned_at": "2024-05-10T16:30:51Z"
+  },
+
+   "system_log": {
+    "log_id": 1,
+    "transaction_id": 1,
+    "log_status": "success",
+    "service_center": "+250788110381",
+    "readable_date": "10 May 2024 4:30:58 PM",
+    "logged_at": "2024-05-10T16:30:58Z"
+  },
+
+  "complete_transaction": {
+    "transaction_id": 1,
+    "transaction_reference": "76662021700",
+    "amount": 2000.00,
+    "transaction_type": "received",
+    "transaction_status": "completed",
+    "transaction_date": "2024-05-10T16:30:51Z",
+    "balance_after": 2000.00,
+    "raw_sms_body": "You have received 2000 RWF from Jane Smith (*********013) on your mobile money account at 2024-05-10 16:30:51. Message from sender: . Your new balance:2000 RWF. Financial Transaction Id: 76662021700.",
+    "category": {
+      "category_id": 1,
+      "category_name": "transfer",
+      "description": "Person-to-person money transfer"
+    },
+    "participants": [
+      {
+        "role_type": "sender",
+        "user": {
+          "user_id": 2,
+          "phone_number": "250788110013",
+          "contact_name": "Jane Smith"
+        }
+      },
+      {
+        "role_type": "receiver",
+        "user": {
+          "user_id": 1,
+          "phone_number": "250795963036",
+          "contact_name": "Account Holder"
+        }
+      }
+    ],
+    "system_log": {
+      "log_id": 1,
+      "log_status": "success",
+      "service_center": "+250788110381",
+      "logged_at": "2024-05-10T16:30:58Z"
+    }
+  }
 }
