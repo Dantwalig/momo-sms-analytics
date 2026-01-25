@@ -6,12 +6,24 @@
     "user_type": "individual",
     "created_at": "2024-05-10T16:30:51Z"
   },
-  
+
   "category": {
     "category_id": 1,
     "category_name": "transfer",
     "description": "Person-to-person money transfer",
     "created_at": "2024-05-10T00:00:00Z"
+  },
+
+  "transaction": {
+    "transaction_id": 1,
+    "transaction_reference": "76662021700",
+    "amount": 2000.00,
+    "transaction_type": "received",
+    "transaction_status": "completed",
+    "transaction_date": "2024-05-10T16:30:51Z",
+    "category_id": 1,
+    "raw_sms_body": "You have received 2000 RWF from Jane Smith (*********013) on your mobile money account at 2024-05-10 16:30:51. Message from sender: . Your new balance:2000 RWF. Financial Transaction Id: 76662021700.",
+    "balance_after": 2000.00
   },
 
   
