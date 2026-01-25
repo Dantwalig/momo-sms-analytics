@@ -1,3 +1,11 @@
 {
-    
+  "user": {
+    "user_id": 1,
+    "phone_number": "250791666666",
+    "contact_name": "Jane Smith",
+    "user_type": "individual",
+    "created_at": "2024-05-10T16:30:51Z"
+  }
+
+  
 }
