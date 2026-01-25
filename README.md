@@ -150,3 +150,7 @@ python -m unittest discover tests
 ## SCRUM BOARD
 
 [Scrum Board](https://github.com/users/Abdull-Kudus/projects/2)
+
+## System Architecture
+
+![System Architecture](web/assets/architecture.png)
