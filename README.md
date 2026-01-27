@@ -2,154 +2,229 @@
 
 ## Team Members
 
-- Abdul Kudus Zakaria Mukhtaru
-- Ariane Itetero
-- Modupe Akanni
-- Peter Mfitumukiza
-- Daniel Gakumba Ntwali
+* Abdul Kudus Zakaria Mukhtaru
+* Ariane Itetero
+* Modupe Akanni
+* Peter Mfitumukiza
+* Daniel Gakumba Ntwali
 
 ## Project Description
 
 This project processes MoMo (Mobile Money) SMS data in XML format, cleans and categorizes the data, stores it in a relational database, and provides a frontend interface to analyze and visualize the data. The application demonstrates enterprise-level fullstack development with backend data processing, database management, and frontend development.
 
+For Week 2, the project also focuses on database design and implementation, including ERD design, SQL schema implementation, and JSON data modeling.
+
 ## Project Structure
 
-```
+```text
 .
-├── README.md                         # Setup, run, overview
-├── .env.example                      # DATABASE_URL or path to SQLite
-├── requirements.txt                  # Python dependencies
-├── index.html                        # Dashboard entry (static)
+├── README.md
+├── .env.example
+├── requirements.txt
+├── index.html
+├── docs/
+│   └── erd_diagram.pdf
+├── database/
+│   └── database_setup.sql
+├── examples/
+│   └── json_schemas.json
 ├── web/
-│   ├── styles.css                    # Dashboard styling
-│   ├── chart_handler.js              # Fetch + render charts/tables
-│   └── assets/                       # Images/icons (optional)
+│   ├── styles.css
+│   ├── chart_handler.js
+│   └── assets/
+│       └── architecture.png
 ├── data/
-│   ├── raw/                          # Provided XML input (git-ignored)
-│   │   └── momo.xml
-│   ├── processed/                    # Cleaned/derived outputs for frontend
-│   │   └── dashboard.json            # Aggregates the dashboard reads
-│   ├── db.sqlite3                    # SQLite DB file
+│   ├── raw/                          # XML input (git-ignored)
+│   ├── processed/
+│   │   └── dashboard.json
+│   ├── db.sqlite3                    # Local DB (git-ignored)
 │   └── logs/
-│       ├── etl.log                   # Structured ETL logs
-│       └── dead_letter/              # Unparsed/ignored XML snippets
+│       ├── etl.log
+│       └── dead_letter/
 ├── etl/
-│   ├── __init__.py
-│   ├── config.py                     # File paths, thresholds, categories
-│   ├── parse_xml.py                  # XML parsing (ElementTree/lxml)
-│   ├── clean_normalize.py            # Amounts, dates, phone normalization
-│   ├── categorize.py                 # Simple rules for transaction types
-│   ├── load_db.py                    # Create tables + upsert to SQLite
-│   └── run.py                        # CLI: parse -> clean -> categorize -> load -> export JSON
+│   ├── config.py
+│   ├── parse_xml.py
+│   ├── clean_normalize.py
+│   ├── categorize.py
+│   ├── load_db.py
+│   └── run.py
 ├── api/                              # Optional (bonus)
-│   ├── __init__.py
-│   ├── app.py                        # Minimal FastAPI with /transactions, /analytics
-│   ├── db.py                         # SQLite connection helpers
-│   └── schemas.py                    # Pydantic response models
+│   ├── app.py
+│   ├── db.py
+│   └── schemas.py
 ├── scripts/
-│   ├── run_etl.sh                    # python etl/run.py --xml data/raw/momo.xml
-│   ├── export_json.sh                # Rebuild data/processed/dashboard.json
-│   └── serve_frontend.sh             # python -m http.server 8000 (or Flask static)
+│   ├── run_etl.sh
+│   ├── export_json.sh
+│   └── serve_frontend.sh
 └── tests/
-    ├── test_parse_xml.py             # Small unit tests
+    ├── test_parse_xml.py
     ├── test_clean_normalize.py
     └── test_categorize.py
 ```
 
+##  Database Design Components
+
+### Entity Relationship Diagram (ERD)
+
+The ERD was created using a professional diagramming tool and includes the following core entities:
+
+* Transactions
+* Users / Customers
+* Transaction_Categories
+* System_Logs
+
+The diagram shows primary keys, foreign keys, relationship cardinality (1:1, 1:M, M:N), and at least one many-to-many relationship resolved using a junction table.
+
+**Location:**
+
+```
+docs/erd_diagram.pdf
+```
+
+### SQL Database Implementation
+
+The relational schema is implemented using MySQL.
+
+The SQL script includes:
+
+* CREATE TABLE statements with appropriate data types
+* PRIMARY KEY and FOREIGN KEY constraints
+* CHECK constraints for validation
+* Indexed columns for performance
+* Column comments for documentation
+* Sample data (minimum five records per main table)
+
+**Location:**
+
+```
+database/database_setup.sql
+```
+
+CRUD operations were tested using SELECT, UPDATE, and DELETE queries. Screenshots of results are included in the Database Design PDF document.
+
+### JSON Data Modeling
+
+JSON examples demonstrate how relational data is serialized for API responses.
+
+The examples include:
+
+* User JSON object
+* Transaction JSON object
+* Category JSON object
+* System log JSON object
+* A complex transaction JSON object with nested related data
+
+**Location:**
+
+```
+examples/json_schemas.json
+```
+
+### SQL to JSON Mapping
+
+Relational data is represented in JSON using nested objects.
+
+| SQL Table              | JSON Representation |
+| ---------------------- | ------------------- |
+| Users                  | sender / receiver   |
+| Transactions           | transaction         |
+| Transaction_Categories | category            |
+| System_Logs            | system_log          |
+
 ## Setup
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd momo-sms-analytics
-   ```
+### 1. Clone the Repository
 
-2. Create a virtual environment (recommended):
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+```bash
+git clone <repository-url>
+cd momo-sms-analytics
+```
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 2. Create a Virtual Environment
 
-4. Copy `.env.example` to `.env` and configure:
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-5. Place your XML data file in `data/raw/momo.xml`
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+
+```bash
+cp .env.example .env
+```
+
+### 5. Add XML Data
+
+Place your XML file in:
+
+```
+data/raw/momo.xml
+```
 
 ## Usage
 
 ### Run ETL Pipeline
 
-Process the XML data through the ETL pipeline:
 ```bash
 bash scripts/run_etl.sh
-# Or specify a custom XML file:
-bash scripts/run_etl.sh path/to/your/file.xml
 ```
 
-Or directly:
+or
+
 ```bash
 python etl/run.py --xml data/raw/momo.xml
 ```
 
 ### Export Dashboard JSON
 
-Rebuild the dashboard JSON file:
 ```bash
 bash scripts/export_json.sh
 ```
 
 ### Serve Frontend
 
-Start the frontend server:
 ```bash
 bash scripts/serve_frontend.sh
-# Or specify a custom port:
-bash scripts/serve_frontend.sh 8080
 ```
 
-Then open `http://localhost:8000` in your browser.
+Open in browser:
+
+```
+http://localhost:8000
+```
 
 ### Run Tests
 
 ```bash
 python -m pytest tests/
-# Or
-python -m unittest discover tests
 ```
 
-## Development Workflow
+## Team Collaboration and Version Control
 
-1. **ETL Pipeline**: The ETL pipeline processes XML data through these steps:
-   - Parse XML file
-   - Clean and normalize data (amounts, dates, phone numbers)
-   - Categorize transactions
-   - Load into SQLite database
-   - Export aggregated JSON for dashboard
+* All team members contributed through GitHub commits
+* Code commits are the only evidence of contribution
+* Files are organized into required folders
+* Scrum board was updated with completed tasks and new sprint planning
 
-2. **Frontend**: The dashboard reads from `data/processed/dashboard.json` and visualizes:
-   - Summary statistics
-   - Transaction charts (by category, over time)
-   - Transaction table
+## Scrum Board
 
-3. **API** (Optional/Bonus): FastAPI endpoints for serving transaction data and analytics
+[https://github.com/users/Abdull-Kudus/projects/2](https://github.com/users/Abdull-Kudus/projects/2)
 
-## Notes
 
-- Raw XML files in `data/raw/` are git-ignored
-- Database files (`*.sqlite3`) are git-ignored
-- Logs are stored in `data/logs/`
-- Unparsed XML snippets are stored in `data/logs/dead_letter/`
+### AI Usage Log
+| Date       | Tool      | Purpose                       | Used For                                                   |
+| ---------- | --------- | ----------------------------- | ---------------------------------------------------------- |
+| 27/01/2026 | ChatGPT   | Formatting and styling README | Helped structure and format README for GitHub presentation |
+| [dd/mm]    | Grammarly | Grammar                       | Documentation proofreading                                 |
 
-## SCRUM BOARD
 
-[Scrum Board](https://github.com/users/Abdull-Kudus/projects/2)
+All design decisions were made by team members.
 
 ## System Architecture
 
