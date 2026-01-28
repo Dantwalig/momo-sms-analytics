@@ -23,7 +23,10 @@ For Week 2, the project also focuses on database design and implementation, incl
 ├── requirements.txt
 ├── index.html
 ├── docs/
-│   └── erd_diagram.pdf
+│   ├── api_docs.md
+│   ├── Database Design Document.pdf
+│   ├── erd_diagram.pdf
+│   └── json_mapping.md
 ├── database/
 │   └── database_setup.sql
 ├── examples/
