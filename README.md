@@ -10,12 +10,13 @@
 
 ## Project Description
 
-This project processes MoMo (Mobile Money) SMS data in XML format, cleans and categorizes the data, stores it in a relational database, and provides a frontend interface to analyze and visualize the data. The application demonstrates enterprise-level fullstack development with backend data processing, database management, and frontend development.
+This project processes MoMo (Mobile Money) SMS data in XML format, cleans and categorizes the data, stores it in a relational database, and provides a REST API for secure data access. The application demonstrates enterprise-level fullstack development with backend data processing, database management, API security, and efficient data structure implementation.
 
-For Week 2, the project also focuses on database design and implementation, including ERD design, SQL schema implementation, and JSON data modeling.
+The project includes:
+- **Week 1-2**: ETL pipeline, database design, and frontend visualization
+- **Week 3**: REST API implementation with authentication, CRUD operations, and DSA integration
 
 ## Project Structure
-
 ```text
 .
 ├── README.md
@@ -27,6 +28,7 @@ For Week 2, the project also focuses on database design and implementation, incl
 │   ├── Database Design Document.pdf
 │   ├── erd_diagram.pdf
 │   └── json_mapping.md
+├── screenshots/  
 ├── database/
 │   └── database_setup.sql
 ├── examples/
@@ -51,26 +53,32 @@ For Week 2, the project also focuses on database design and implementation, incl
 │   ├── categorize.py
 │   ├── load_db.py
 │   └── run.py
-├── api/                              # Optional (bonus)
-│   ├── app.py
-│   ├── db.py
-│   └── schemas.py
+├── api/
+│   ├── run_server.py
+│   ├── config.py
+│   ├── auth.py
+│   └── handlers.py
+├── dsa/
+│   ├── xml_parser.py
+│   └── search_comparison.py
 ├── scripts/
 │   ├── run_etl.sh
 │   ├── export_json.sh
-│   └── serve_frontend.sh
+│   ├── serve_frontend.sh
+│   └── test_api.sh
 └── tests/
     ├── test_parse_xml.py
     ├── test_clean_normalize.py
     └── test_categorize.py
 ```
 
-##  Database Design Components
+## Features
 
-### Entity Relationship Diagram (ERD)
+### Database Design Components
 
-The ERD was created using a professional diagramming tool and includes the following core entities:
+#### Entity Relationship Diagram (ERD)
 
+The ERD includes the following core entities:
 * Transactions
 * Users / Customers
 * Transaction_Categories
@@ -78,18 +86,11 @@ The ERD was created using a professional diagramming tool and includes the follo
 
 The diagram shows primary keys, foreign keys, relationship cardinality (1:1, 1:M, M:N), and at least one many-to-many relationship resolved using a junction table.
 
-**Location:**
+**Location:** `docs/erd_diagram.pdf`
 
-```
-docs/erd_diagram.pdf
-```
+#### SQL Database Implementation
 
-### SQL Database Implementation
-
-The relational schema is implemented using MySQL.
-
-The SQL script includes:
-
+The relational schema is implemented using MySQL with:
 * CREATE TABLE statements with appropriate data types
 * PRIMARY KEY and FOREIGN KEY constraints
 * CHECK constraints for validation
@@ -97,138 +98,214 @@ The SQL script includes:
 * Column comments for documentation
 * Sample data (minimum five records per main table)
 
-**Location:**
+**Location:** `database/database_setup.sql`
 
-```
-database/database_setup.sql
-```
-
-CRUD operations were tested using SELECT, UPDATE, and DELETE queries. Screenshots of results are included in the Database Design PDF document.
-
-### JSON Data Modeling
+#### JSON Data Modeling
 
 JSON examples demonstrate how relational data is serialized for API responses.
 
-The examples include:
+**Location:** `examples/json_schemas.json`
 
-* User JSON object
-* Transaction JSON object
-* Category JSON object
-* System log JSON object
-* A complex transaction JSON object with nested related data
+### REST API Features
 
-**Location:**
-
-```
-examples/json_schemas.json
-```
-
-### SQL to JSON Mapping
-
-Relational data is represented in JSON using nested objects.
-
-| SQL Table              | JSON Representation |
-| ---------------------- | ------------------- |
-| Users                  | sender / receiver   |
-| Transactions           | transaction         |
-| Transaction_Categories | category            |
-| System_Logs            | system_log          |
+- **CRUD Operations**: Full Create, Read, Update, Delete functionality for transactions
+- **Basic Authentication**: Secure endpoint protection with 401 Unauthorized responses
+- **XML to JSON Parsing**: Converts SMS transaction records from XML format to JSON
+- **DSA Integration**: Linear search vs. dictionary lookup implementation with performance analysis
+- **Comprehensive Documentation**: Complete API endpoint specifications with examples
 
 ## Setup
 
 ### 1. Clone the Repository
-
 ```bash
 git clone <repository-url>
 cd momo-sms-analytics
 ```
 
 ### 2. Create a Virtual Environment
-
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
 ### 3. Install Dependencies
-
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 4. Configure Environment Variables
-
 ```bash
 cp .env.example .env
+```
+
+Edit `.env` or set environment variables:
+```bash
+# Database Configuration
+export DB_HOST=localhost
+export DB_USER=root
+export DB_PASSWORD=your_password
+export DB_NAME=momo-sms-analytics
+export DB_PORT=3306
+
+# API Authentication
+export API_USERNAME=admin
+export API_PASSWORD=password
 ```
 
 ### 5. Add XML Data
 
 Place your XML file in:
-
 ```
-data/raw/momo.xml
+data/raw/modified_sms_v2.xml
 ```
 
-## Usage
-
-### Run ETL Pipeline
-
+### 6. Run ETL Pipeline (Optional)
 ```bash
 bash scripts/run_etl.sh
 ```
 
 or
-
 ```bash
-python etl/run.py --xml data/raw/momo.xml
+python etl/run.py --xml data/raw/modified_sms_v2.xml
 ```
 
-### Export Dashboard JSON
+## API Usage
 
+### Start the REST API Server
+```bash
+python api/run_server.py
+```
+
+The server will start on `http://localhost:8000`
+
+### Test the API
+
+Run all tests:
+```bash
+bash scripts/test_api.sh
+```
+
+Or use curl directly:
+```bash
+# List all transactions
+curl -X GET http://localhost:8000/transactions \
+  -H "Authorization: Basic $(echo -n 'admin:password' | base64)"
+
+# Get single transaction
+curl -X GET http://localhost:8000/transactions/1 \
+  -H "Authorization: Basic $(echo -n 'admin:password' | base64)"
+
+# Create new transaction
+curl -X POST http://localhost:8000/transactions \
+  -H "Authorization: Basic $(echo -n 'admin:password' | base64)" \
+  -H "Content-Type: application/json" \
+  -d '{"type":"deposit","amount":5000,"sender":"John","receiver":"Jane"}'
+
+# Update transaction
+curl -X PUT http://localhost:8000/transactions/1 \
+  -H "Authorization: Basic $(echo -n 'admin:password' | base64)" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":6000}'
+
+# Delete transaction
+curl -X DELETE http://localhost:8000/transactions/1 \
+  -H "Authorization: Basic $(echo -n 'admin:password' | base64)"
+```
+
+### API Endpoints
+
+- `GET /transactions` - List all transactions
+- `GET /transactions/{id}` - Get single transaction
+- `POST /transactions` - Create new transaction
+- `PUT /transactions/{id}` - Update transaction
+- `DELETE /transactions/{id}` - Delete transaction
+
+See `docs/api_docs.md` for complete documentation including request/response examples and error codes.
+
+## Data Structures & Algorithms
+
+### Run DSA Comparison
+
+Compare linear search vs dictionary lookup performance:
+```bash
+python dsa/search_comparison.py
+```
+
+This demonstrates:
+- Linear search implementation for finding transactions
+- Dictionary lookup implementation (O(1) access)
+- Performance comparison with timing results
+- Analysis of efficiency differences
+
+### Parse XML to JSON
+```bash
+python dsa/xml_parser.py
+```
+
+Or use in Python:
+```python
+from dsa.xml_parser import parse_xml_file
+
+transactions = parse_xml_file('data/raw/modified_sms_v2.xml')
+print(f"Parsed {len(transactions)} transactions")
+```
+
+## Frontend Dashboard
+
+### Export Dashboard JSON
 ```bash
 bash scripts/export_json.sh
 ```
 
 ### Serve Frontend
-
 ```bash
 bash scripts/serve_frontend.sh
 ```
 
-Open in browser:
+Open in browser: `http://localhost:8000`
 
-```
-http://localhost:8000
-```
+## Testing
 
-### Run Tests
-
+### Run Unit Tests
 ```bash
 python -m pytest tests/
 ```
+
+### API Testing
+
+Test screenshots are available in `screenshots/` directory including:
+- Successful GET with authentication
+- Unauthorized request (401 error)
+- Successful POST, PUT, DELETE operations
 
 ## Team Collaboration and Version Control
 
 * All team members contributed through GitHub commits
 * Code commits are the only evidence of contribution
 * Files are organized into required folders
-* Scrum board was updated with completed tasks and new sprint planning
+* Scrum board updated with completed tasks and sprint planning
 
-## Scrum Board
+### Scrum Board
 
 [https://github.com/users/Abdull-Kudus/projects/2](https://github.com/users/Abdull-Kudus/projects/2)
 
-
 ### AI Usage Log
+
 | Date       | Tool      | Purpose                       | Used For                                                   |
 | ---------- | --------- | ----------------------------- | ---------------------------------------------------------- |
 | 27/01/2026 | ChatGPT   | Formatting and styling README | Helped structure and format README for GitHub presentation |
+| 02/02/2026 | Claude    | API documentation             | Assisted with API endpoint documentation structure         |
 | [dd/mm]    | Grammarly | Grammar                       | Documentation proofreading                                 |
-
 
 All design decisions were made by team members.
 
 ## System Architecture
 
 ![System Architecture](web/assets/architecture.png)
+
+## Documentation
+
+- **API Documentation**: `docs/api_docs.md`
+- **Database Design**: `docs/Database Design Document.pdf`
+- **ERD Diagram**: `docs/erd_diagram.pdf`
+- **JSON Mapping**: `docs/json_mapping.md`
